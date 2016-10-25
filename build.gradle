@@ -28,6 +28,8 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'application'
+
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
@@ -44,9 +46,19 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+mainClassName = 'SheetsQuickstart'
+version = '1.0'
+
 dependencies {
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework:spring-jdbc")
     compile("com.h2database:h2")
     testCompile("junit:junit")
+
+    compile 'com.google.api-client:google-api-client:1.22.0'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.22.0'
+    compile 'com.google.apis:google-api-services-sheets:v4-rev34-1.22.0'
 }
+
+apply plugin: 'java'
+
