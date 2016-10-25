@@ -22,8 +22,7 @@ import java.util.List;
 
 public class SheetsQuickstart {
     /** Application name. */
-    private static final String APPLICATION_NAME =
-            "Google Sheets API Java Quickstart";
+    private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
 
     /** Directory to store user credentials for this application. */
     private static final java.io.File DATA_STORE_DIR = new java.io.File(
@@ -33,8 +32,7 @@ public class SheetsQuickstart {
     private static FileDataStoreFactory DATA_STORE_FACTORY;
 
     /** Global instance of the JSON factory. */
-    private static final JsonFactory JSON_FACTORY =
-            JacksonFactory.getDefaultInstance();
+    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
     /** Global instance of the HTTP transport. */
     private static HttpTransport HTTP_TRANSPORT;
@@ -44,8 +42,7 @@ public class SheetsQuickstart {
      * If modifying these scopes, delete your previously saved credentials
      * at ~/.credentials/sheets.googleapis.com-java-quickstart
      */
-    private static final List<String> SCOPES =
-            Arrays.asList(SheetsScopes.SPREADSHEETS_READONLY);
+    private static final List<String> SCOPES = Arrays.asList(SheetsScopes.SPREADSHEETS_READONLY);
 
     static {
         try {
@@ -74,10 +71,8 @@ public class SheetsQuickstart {
                         .setDataStoreFactory(DATA_STORE_FACTORY)
                         .setAccessType("offline")
                         .build();
-        Credential credential = new AuthorizationCodeInstalledApp(
-                flow, new LocalServerReceiver()).authorize("user");
-        System.out.println(
-                "Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
+        Credential credential = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+        System.out.println("Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
         return credential;
     }
 
@@ -101,9 +96,22 @@ public class SheetsQuickstart {
         // https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
         String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
         String range = "Class Data!A2:E";
-        ValueRange response = service.spreadsheets().values()
-                .get(spreadsheetId, range)
-                .execute();
+        //print(service, spreadsheetId, range);
+        spreadsheetId="1EmCA5qbW0VnT09QwskgBag-jO4O4rDzYQlHRlHXnMpk";
+        range="'ф1'!A2:H";
+        print(service, spreadsheetId, range);
+        range="'факты.мес'!A2:H";
+        print(service, spreadsheetId, range);
+        range="'планы с Q4Y2016'!A3:L";
+        print(service, spreadsheetId, range);
+
+
+
+
+    }
+
+    private static void print(Sheets service, String spreadsheetId, String range) throws IOException {
+        ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
         List<List<Object>> values = response.getValues();
         if (values == null || values.size() == 0) {
             System.out.println("No data found.");
@@ -111,7 +119,7 @@ public class SheetsQuickstart {
             System.out.println("Name, Major");
             for (List row : values) {
                 // Print columns A and E, which correspond to indices 0 and 4.
-                System.out.printf("%s, %s\n", row.get(0), row.get(4));
+                System.out.printf("%s, %s, s, s\n", row.get(0),row.get(1));//,row.get(2), row.get(3));
             }
         }
     }
