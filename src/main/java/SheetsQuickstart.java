@@ -17,28 +17,43 @@ import com.google.api.services.sheets.v4.Sheets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class SheetsQuickstart {
-    /** Application name. */
+    /**
+     * Application name.
+     */
     private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
 
-    /** Directory to store user credentials for this application. */
+    /**
+     * Directory to store user credentials for this application.
+     */
     private static final java.io.File DATA_STORE_DIR = new java.io.File(
             System.getProperty("user.home"), ".credentials/sheets.googleapis.com-java-quickstart");
 
-    /** Global instance of the {@link FileDataStoreFactory}. */
+    /**
+     * Global instance of the {@link FileDataStoreFactory}.
+     */
     private static FileDataStoreFactory DATA_STORE_FACTORY;
 
-    /** Global instance of the JSON factory. */
+    /**
+     * Global instance of the JSON factory.
+     */
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
-    /** Global instance of the HTTP transport. */
+    /**
+     * Global instance of the HTTP transport.
+     */
     private static HttpTransport HTTP_TRANSPORT;
 
-    /** Global instance of the scopes required by this quickstart.
-     *
+    /**
+     * Global instance of the scopes required by this quickstart.
+     * <p>
      * If modifying these scopes, delete your previously saved credentials
      * at ~/.credentials/sheets.googleapis.com-java-quickstart
      */
@@ -56,6 +71,7 @@ public class SheetsQuickstart {
 
     /**
      * Creates an authorized Credential object.
+     *
      * @return an authorized Credential object.
      * @throws IOException
      */
@@ -78,6 +94,7 @@ public class SheetsQuickstart {
 
     /**
      * Build and return an authorized Sheets API client service.
+     *
      * @return an authorized Sheets API client service
      * @throws IOException
      */
@@ -97,15 +114,14 @@ public class SheetsQuickstart {
         String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
         String range = "Class Data!A2:E";
         //print(service, spreadsheetId, range);
-        spreadsheetId="1EmCA5qbW0VnT09QwskgBag-jO4O4rDzYQlHRlHXnMpk";
-        range="'ф1'!A2:H";
-        print(service, spreadsheetId, range);
-        range="'факты.мес'!A2:H";
+        spreadsheetId = "1EmCA5qbW0VnT09QwskgBag-jO4O4rDzYQlHRlHXnMpk";
+        range = "'ф1'!A2:H";
+        List<Fact> r = load(service, spreadsheetId, range, new FactMapper());
+        System.out.println(r);
+      /*  range="'факты.мес'!A2:H";
         print(service, spreadsheetId, range);
         range="'планы с Q4Y2016'!A3:L";
-        print(service, spreadsheetId, range);
-
-
+        print(service, spreadsheetId, range);*/
 
 
     }
@@ -119,15 +135,65 @@ public class SheetsQuickstart {
             System.out.println("DATA______________________________________");
             for (List row : values) {
                 for (Object o : row) {
-                    System.out.print(o+",");
+                    System.out.print(o + ",");
                 }
                 System.out.println();
-
-                // Print columns A and E, which correspond to indices 0 and 4.
-                //System.out.printf("%s, %s, s, s\n", row.get(0),row.get(1));//,row.get(2), row.get(3));
             }
         }
     }
 
+    private static List<Fact> load(Sheets service, String spreadsheetId, String range, FactMapper m) throws IOException {
+        ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
+        List<List<Object>> values = response.getValues();
+        List<Fact> result = new ArrayList<>();
 
+        if (values != null && values.size() > 0) {
+            for (List row : values) {
+                Fact v = m.map(row);
+                if(v.getDate()!=null&&v.getAmount()!=null) {
+                    result.add(v);
+                }
+            }
+        }
+        return result;
+    }
+}
+
+class FactMapper {
+    // TODO: 26.10.2016 add filter
+    public Fact map(List row) {
+        Fact res = new Fact();
+        res.setUser(row.get(0).toString());
+        res.setDate(toLocalDate(row.get(1).toString()));
+        res.setAccount(row.get(2).toString());
+        res.setCateory(row.get(3).toString());
+        String money = row.get(4).toString();
+        res.setAmount(toBigDecimal(money));
+        res.setComment(row.get(5).toString());
+        res.setSubtotal(toBigDecimal(row.get(6).toString()));
+        res.setMonth(row.get(7).toString());
+        return res;
+    }
+
+    BigDecimal toBigDecimal(String from) {
+        String money = from;
+        money = money.replaceAll(",", ".");
+        money = money.replace(" ", "");
+
+        if (money.length() > 0) {
+            BigDecimal bd = new BigDecimal(money);
+            return bd;
+        }
+        return null;
+    }
+
+    LocalDate toLocalDate(String from) {
+        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        try {
+            final LocalDate dt = LocalDate.parse(from, dtf);
+            return dt;
+        } catch (Exception e) {
+        }
+        return null;
+    }
 }
