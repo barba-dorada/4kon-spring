@@ -130,25 +130,9 @@ public class SheetsQuickstart {
 
     }
     private static void print(List<? extends Object> list) {
-        String commaSeparatedNumbers = list.stream().map(i -> i.toString()).collect(Collectors.joining("\n"));
-        System.out.println(commaSeparatedNumbers);
+        String s = list.stream().map(i -> i.toString()).collect(Collectors.joining("\n"));
+        System.out.println(s);
     }
-
-/*    private static void print(Sheets service, String spreadsheetId, String range) throws IOException {
-        ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
-        List<List<Object>> values = response.getValues();
-        if (values == null || values.size() == 0) {
-            System.out.println("No data found.");
-        } else {
-            System.out.println("DATA______________________________________");
-            for (List row : values) {
-                for (Object o : row) {
-                    System.out.print(o + ",");
-                }
-                System.out.println();
-            }
-        }
-    }*/
 
     private static List<Fact> load(Sheets service, String spreadsheetId, String range, FactMapper m) throws IOException {
         ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
