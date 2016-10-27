@@ -22,7 +22,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SheetsQuickstart {
     /**
@@ -117,16 +119,22 @@ public class SheetsQuickstart {
         spreadsheetId = "1EmCA5qbW0VnT09QwskgBag-jO4O4rDzYQlHRlHXnMpk";
         range = "'ф1'!A2:H";
         List<Fact> r = load(service, spreadsheetId, range, new FactMapper());
-        System.out.println(r);
-      /*  range="'факты.мес'!A2:H";
-        print(service, spreadsheetId, range);
-        range="'планы с Q4Y2016'!A3:L";
+        print(r);
+
+       /* range="'факты.мес'!A2:H";
         print(service, spreadsheetId, range);*/
 
+        range = "'планы с Q4Y2016'!A3:L";
+        List<TemplPlan> r2 = load(service, spreadsheetId, range, new TemplPlanMapper());
+        print(r2);
 
     }
+    private static void print(List<? extends Object> list) {
+        String commaSeparatedNumbers = list.stream().map(i -> i.toString()).collect(Collectors.joining("\n"));
+        System.out.println(commaSeparatedNumbers);
+    }
 
-    private static void print(Sheets service, String spreadsheetId, String range) throws IOException {
+/*    private static void print(Sheets service, String spreadsheetId, String range) throws IOException {
         ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
         List<List<Object>> values = response.getValues();
         if (values == null || values.size() == 0) {
@@ -140,7 +148,7 @@ public class SheetsQuickstart {
                 System.out.println();
             }
         }
-    }
+    }*/
 
     private static List<Fact> load(Sheets service, String spreadsheetId, String range, FactMapper m) throws IOException {
         ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
@@ -157,9 +165,40 @@ public class SheetsQuickstart {
         }
         return result;
     }
+
+    private static List<TemplPlan> load(Sheets service, String spreadsheetId, String range, TemplPlanMapper m) throws IOException {
+        ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
+        List<List<Object>> values = response.getValues();
+        List<TemplPlan> result = new ArrayList<>();
+
+        if (values != null && values.size() > 0) {
+            for (List row : values) {
+                TemplPlan v = m.map(row);
+                //if(v.getDate()!=null&&v.getAmount()!=null) {
+                result.add(v);
+                //}
+            }
+        }
+        return result;
+    }
 }
 
-class FactMapper {
+class TemplPlanMapper extends BaseMapper {
+    public TemplPlan map(List row) {
+        TemplPlan v = new TemplPlan();
+        if (row.isEmpty()) {
+            return v;
+        }
+        v.setCateory(row.get(0).toString());
+        v.setComment(row.get(1).toString());
+        v.setAmount(toBigDecimal(row.get(2).toString()));
+        v.setFirstDate(toLocalDate(row.get(5).toString()));
+        v.setTotalPerYear(toBigDecimal(row.get(7).toString()));
+        return v;
+    }
+}
+
+class FactMapper extends BaseMapper {
     // TODO: 26.10.2016 add filter
     public Fact map(List row) {
         Fact res = new Fact();
@@ -174,7 +213,9 @@ class FactMapper {
         res.setMonth(row.get(7).toString());
         return res;
     }
+}
 
+class BaseMapper {
     BigDecimal toBigDecimal(String from) {
         String money = from;
         money = money.replaceAll(",", ".");
