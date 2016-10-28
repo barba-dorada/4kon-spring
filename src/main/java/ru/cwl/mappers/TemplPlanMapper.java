@@ -20,4 +20,9 @@ public class TemplPlanMapper implements RowMapper<TemplPlan>, MUtils {
         v.setTotalPerYear(toBigDecimal(row.get(7).toString()));
         return v;
     }
+
+    @Override
+    public boolean isValid(TemplPlan v) {
+        return v.getAmount()!=null && v.getCateory()!=null;
+    }
 }

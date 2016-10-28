@@ -7,4 +7,5 @@ import java.util.List;
  */
 public interface RowMapper<T> {
     T map(List row);
+    default boolean isValid(T v){return true;}
 }

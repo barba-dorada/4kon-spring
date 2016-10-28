@@ -28,6 +28,7 @@ public class SheetsQuickstart {
         spreadsheetId = "1EmCA5qbW0VnT09QwskgBag-jO4O4rDzYQlHRlHXnMpk";
         range = "'ф1'!A2:H";
         List<Fact> r = load(service, spreadsheetId, range, new FactMapper());
+        r=r.stream().filter(i->i.getDate()!=null).collect(Collectors.toList());
         print(r);
 
        /* range="'факты.мес'!A2:H";
@@ -35,6 +36,7 @@ public class SheetsQuickstart {
 
         range = "'планы с Q4Y2016'!A3:L";
         List<TemplPlan> r2 = load(service, spreadsheetId, range, new TemplPlanMapper());
+
         print(r2);
 
     }
@@ -45,38 +47,6 @@ public class SheetsQuickstart {
         System.out.println(s);
     }
 
-/*    private static List<ru.cwl.model.Fact> load(Sheets service, String spreadsheetId, String range, ru.cwl.mappers.FactMapper m) throws IOException {
-        ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
-        List<List<Object>> values = response.getValues();
-        List<ru.cwl.model.Fact> result = new ArrayList<>();
-
-        if (values != null && values.size() > 0) {
-            for (List row : values) {
-                ru.cwl.model.Fact v = m.map(row);
-                if(v.getDate()!=null&&v.getAmount()!=null) {
-                    result.add(v);
-                }
-            }
-        }
-        return result;
-    }
-
-    private static List<ru.cwl.model.TemplPlan> load(Sheets service, String spreadsheetId, String range, ru.cwl.mappers.TemplPlanMapper m) throws IOException {
-        ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
-        List<List<Object>> values = response.getValues();
-        List<ru.cwl.model.TemplPlan> result = new ArrayList<>();
-
-        if (values != null && values.size() > 0) {
-            for (List row : values) {
-                ru.cwl.model.TemplPlan v = m.map(row);
-                //if(v.getDate()!=null&&v.getAmount()!=null) {
-                result.add(v);
-                //}
-            }
-        }
-        return result;
-    }*/
-
     private static <T> List<T> load(Sheets service, String spreadsheetId, String range, RowMapper<T> m) throws IOException {
         ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
         List<List<Object>> values = response.getValues();
@@ -85,9 +55,9 @@ public class SheetsQuickstart {
         if (values != null && values.size() > 0) {
             for (List row : values) {
                 T v = m.map(row);
-                //if(v.getDate()!=null&&v.getAmount()!=null) {
-                result.add(v);
-                //}
+                if(m.isValid(v)) {
+                    result.add(v);
+                }
             }
         }
         return result;

@@ -22,4 +22,10 @@ public class FactMapper implements RowMapper<Fact>, MUtils {
         res.setMonth(row.get(7).toString());
         return res;
     }
+
+    @Override
+    public boolean isValid(Fact v) {
+        return v.getDate()!=null;
+    }
+
 }

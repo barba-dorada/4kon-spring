@@ -18,7 +18,7 @@ public class Fact {
 
     @Override
     public String toString() {
-        return "ru.cwl.model.Fact{" +
+        return "Fact{" +
                 "user='" + user + '\'' +
                 ", date=" + date +
                 ", account='" + account + '\'' +

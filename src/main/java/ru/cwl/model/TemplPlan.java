@@ -76,7 +76,7 @@ public class TemplPlan {
 
     @Override
     public String toString() {
-        return "ru.cwl.model.TemplPlan{" +
+        return "TemplPlan{" +
                 " cateory='" + cateory + '\'' +
                 ", comment='" + comment + '\'' +
                 ", amount=" + amount +
