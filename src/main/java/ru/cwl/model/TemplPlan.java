@@ -1,3 +1,5 @@
+package ru.cwl.model;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -74,7 +76,7 @@ public class TemplPlan {
 
     @Override
     public String toString() {
-        return "TemplPlan{" +
+        return "ru.cwl.model.TemplPlan{" +
                 " cateory='" + cateory + '\'' +
                 ", comment='" + comment + '\'' +
                 ", amount=" + amount +
