@@ -20,29 +20,23 @@ public class SheetsQuickstart {
         // Build a new authorized API client service.
         Sheets service = GTService.getSheetsService();
 
-        // Prints the names and majors of students in a sample spreadsheet:
-        // https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-        String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
-        String range = "Class Data!A2:E";
-        //print(service, spreadsheetId, range);
-        spreadsheetId = "1EmCA5qbW0VnT09QwskgBag-jO4O4rDzYQlHRlHXnMpk";
-        range = "'ф1'!A2:H";
-        List<Fact> r = load(service, spreadsheetId, range, new FactMapper());
-        r=r.stream().filter(i->i.getDate()!=null).collect(Collectors.toList());
-        print(r);
+        final String SHEET = "1EmCA5qbW0VnT09QwskgBag-jO4O4rDzYQlHRlHXnMpk";
+        final String FACTS = "'ф1'!A2:H";
+        List<Fact> facts = load(service, SHEET, FACTS, new FactMapper());
+        print(facts);
+
+        String PLANS = "'планы с Q4Y2016'!A3:L";
+        List<TemplPlan> templPlans = load(service, SHEET, PLANS, new TemplPlanMapper());
+        print(templPlans);
 
        /* range="'факты.мес'!A2:H";
         print(service, spreadsheetId, range);*/
-
-        range = "'планы с Q4Y2016'!A3:L";
-        List<TemplPlan> r2 = load(service, spreadsheetId, range, new TemplPlanMapper());
-
-        print(r2);
-
     }
 
 
     private static void print(List<? extends Object> list) {
+        String name = list.get(0).getClass().getName();
+        System.out.println(name+"____________________________");
         String s = list.stream().map(i -> i.toString()).collect(Collectors.joining("\n"));
         System.out.println(s);
     }
