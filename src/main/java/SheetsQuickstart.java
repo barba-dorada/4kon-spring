@@ -1,5 +1,6 @@
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import ru.cwl.PlanGenerator;
 import ru.cwl.googlesimport.GTService;
 import ru.cwl.mappers.FactMapper;
 import ru.cwl.mappers.RowMapper;
@@ -8,27 +9,28 @@ import ru.cwl.model.Fact;
 import ru.cwl.model.TemplPlan;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SheetsQuickstart {
-
-
-
     public static void main(String[] args) throws IOException {
         // Build a new authorized API client service.
         Sheets service = GTService.getSheetsService();
 
         final String SHEET = "1EmCA5qbW0VnT09QwskgBag-jO4O4rDzYQlHRlHXnMpk";
-        final String FACTS = "'ф1'!A2:H";
+       /* final String FACTS = "'ф1'!A2:H";
         List<Fact> facts = load(service, SHEET, FACTS, new FactMapper());
-        print(facts);
+        print(facts);*/
 
         String PLANS = "'планы с Q4Y2016'!A3:L";
         List<TemplPlan> templPlans = load(service, SHEET, PLANS, new TemplPlanMapper());
-        print(templPlans);
 
+        List<TemplPlan> sl = templPlans.subList(0, 5);
+        print(sl);
+        PlanGenerator pg = new PlanGenerator();
+        pg.generate(sl, LocalDate.of(2016,10,1),LocalDate.of(2017,8,1));
        /* range="'факты.мес'!A2:H";
         print(service, spreadsheetId, range);*/
     }
@@ -56,6 +58,7 @@ public class SheetsQuickstart {
         }
         return result;
     }
+
 
 }
 

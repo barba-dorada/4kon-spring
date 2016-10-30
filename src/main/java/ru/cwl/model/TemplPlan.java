@@ -15,6 +15,8 @@ public class TemplPlan {
     LocalDate lastDate;
     int perYear;
     BigDecimal totalPerYear;
+    DateMethod dateMethod;
+
 
 
 
@@ -74,16 +76,25 @@ public class TemplPlan {
         this.totalPerYear = totalPerYear;
     }
 
+    public DateMethod getDateMethod() {
+        return dateMethod;
+    }
+
+    public void setDateMethod(DateMethod dateMethod) {
+        this.dateMethod = dateMethod;
+    }
+
     @Override
     public String toString() {
         return "TemplPlan{" +
-                " cateory='" + cateory + '\'' +
-                ", comment='" + comment + '\'' +
+                "comment='" + comment + '\'' +
                 ", amount=" + amount +
+                ", cateory='" + cateory + '\'' +
                 ", firstDate=" + firstDate +
                 ", lastDate=" + lastDate +
                 ", perYear=" + perYear +
                 ", totalPerYear=" + totalPerYear +
+                ", dateMethod=" + dateMethod +
                 '}';
     }
 }
