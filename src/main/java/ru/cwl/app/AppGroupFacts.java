@@ -49,6 +49,8 @@ public class AppGroupFacts {
 
     }
 
+
+
     private static void print(List<? extends Object> list) {
         String name = list.get(0).getClass().getName();
         System.out.println(name+"____________________________");
