@@ -2,10 +2,9 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import ru.cwl.PlanGenerator;
 import ru.cwl.googlesimport.GTService;
-import ru.cwl.mappers.FactMapper;
 import ru.cwl.mappers.RowMapper;
 import ru.cwl.mappers.TemplPlanMapper;
-import ru.cwl.model.Fact;
+import ru.cwl.model.Plan;
 import ru.cwl.model.TemplPlan;
 
 import java.io.IOException;
@@ -30,7 +29,8 @@ public class SheetsQuickstart {
         List<TemplPlan> sl = templPlans.subList(0, 5);
         print(sl);
         PlanGenerator pg = new PlanGenerator();
-        pg.generate(sl, LocalDate.of(2016,10,1),LocalDate.of(2017,8,1));
+        List<Plan> res = pg.generate(sl, LocalDate.of(2016, 10, 1), LocalDate.of(2017, 8, 1));
+        print(res);
        /* range="'факты.мес'!A2:H";
         print(service, spreadsheetId, range);*/
     }

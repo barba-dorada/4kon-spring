@@ -2,9 +2,11 @@ package ru.cwl;
 
 import com.sun.istack.internal.NotNull;
 import ru.cwl.model.DateMethod;
+import ru.cwl.model.Plan;
 import ru.cwl.model.TemplPlan;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.time.temporal.ChronoUnit.MONTHS;
@@ -13,11 +15,13 @@ import static java.time.temporal.ChronoUnit.MONTHS;
  * Created by admin on 28.10.2016.
  */
 public class PlanGenerator {
-    public void generate(List<TemplPlan> t, LocalDate from, LocalDate to) {
-        for (TemplPlan templPlan : t) {
-            generate(templPlan, from, to);
 
+    public List<Plan> generate(List<TemplPlan> t, LocalDate from, LocalDate to) {
+        List<Plan> result = new ArrayList<>();
+        for (TemplPlan templPlan : t) {
+            result.addAll(generate(templPlan, from, to));
         }
+        return result;
     }
 
     // TODO: 30.10.2016 написать для месяца 
@@ -26,19 +30,10 @@ public class PlanGenerator {
     // TODO: 30.10.2016 перенести функциональность в енум
     // TODO: 31.10.2016 написать для года
     // на выходе список конкретных планов
-    public void generate(TemplPlan template, @NotNull LocalDate from, @NotNull LocalDate to) {
-        if (template.getDateMethod() == DateMethod.MONTHLY) {
-            // вычисляем первую дату...
-            LocalDate firstDate=template.getFirstDate();
-            if(firstDate==null){
-                // firstdate den
-                firstDate=LocalDate.of(from.getYear(),from.getMonth(),1);
-            }
-            while(firstDate.isBefore(from)){
-                // date adder
-                firstDate=firstDate.plus(1,MONTHS);
-            }
-
+    public List<Plan> generate(TemplPlan template, @NotNull LocalDate from, @NotNull LocalDate to) {
+        List<Plan> result = new ArrayList<Plan>();
+        DateMethod m = template.getDateMethod();
+        LocalDate firstDate = m.getFirstDate(template.getFirstDate(), from);
             // TODO: 30.10.2016 вычислять минимум из
             /*
             1. есть только to->to
@@ -46,11 +41,17 @@ public class PlanGenerator {
             3. есть to fromDate и колво повторов->min(to,fromdate+adder(колво))
             4. а если нет FromDate?
                          */
-            LocalDate lastDate =to;// min(to,            t.getLastDate());
-            // генерируем последовательность...
-            for(LocalDate i=firstDate; firstDate.isBefore(lastDate); firstDate=firstDate.plus(1,MONTHS)){
-                System.out.printf("%s %s %s\n",firstDate,template.getCateory(),template.getAmount());
-            }
+        LocalDate lastDate = to;// min(to,            t.getLastDate());
+
+        // генерируем последовательность...
+        for (; firstDate.isBefore(lastDate); firstDate = m.next(firstDate)) {
+            Plan plan = new Plan();
+            plan.setDate(firstDate);
+            plan.setCategory(template.getCateory());
+            plan.setAmount(template.getAmount());
+            plan.setComment(template.getComment());
+            result.add(plan);
         }
+        return result;
     }
 }
