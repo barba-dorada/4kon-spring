@@ -14,10 +14,7 @@ import ru.cwl.model.TemplPlan;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AppGroupFacts {
@@ -40,16 +37,15 @@ public class AppGroupFacts {
             }
         }
         BigDecimal count=BigDecimal.ZERO;
-        for (Map.Entry<String, BigDecimal> entry : map.entrySet()) {
-            System.out.printf("%-15s: %15s\n",entry.getKey(),entry.getValue());
-            count=count.add(entry.getValue());
+        ArrayList<String> keys = new ArrayList<String>(map.keySet());
+        Collections.sort(keys);
+        for (String key : keys) {
+            System.out.printf("%-15s: %15s\n",key,map.get(key));
+            count=count.add(map.get(key));
         }
         System.out.println("---------------:----------------");
         System.out.printf("total          : %15s\n",count);
-
     }
-
-
 
     private static void print(List<? extends Object> list) {
         String name = list.get(0).getClass().getName();
