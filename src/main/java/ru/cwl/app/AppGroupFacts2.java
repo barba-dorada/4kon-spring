@@ -27,7 +27,8 @@ public class AppGroupFacts2 {
         }
 
         // * add columns & rows sorting
-        // TODO: 08.11.2016 add columns & rows total;
+        // TODO: 08.11.2016 add columns
+        // * rows total;
         // TODO add total;
         List<String> columns = t.getColumnsName();
         Collections.sort(columns);

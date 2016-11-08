@@ -123,7 +123,7 @@ class Tab2<V, D1, D2> {
 class T2 extends Tab2<BigDecimal,String,String>{
 
     T2() {
-        super(BigDecimal.ZERO);
+        super(new BigDecimal("0.00"));
     }
 
     @Override
