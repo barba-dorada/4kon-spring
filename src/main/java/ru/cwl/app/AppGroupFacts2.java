@@ -35,15 +35,18 @@ public class AppGroupFacts2 {
         for (String column : columns) {
             System.out.printf("|%10s",column);
         }
-        System.out.println();
+        System.out.printf("|%10s\n","total");
         final List<String> rows = t.getRowsName();
         Collections.sort(rows);
         for (String row : rows) {
+            BigDecimal total=BigDecimal.ZERO;
             System.out.printf("%-15s ", row);
             for (String column : columns) {
-                System.out.printf("|%10s",t.get(row,column).toString());
+                final BigDecimal value = t.get(row, column);
+                System.out.printf("|%10s", value.toString());
+                total=total.add(value);
             }
-            System.out.println();
+            System.out.printf("|%10s\n", total);
         }
     }
 
