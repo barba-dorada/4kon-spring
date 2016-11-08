@@ -26,16 +26,19 @@ public class AppGroupFacts2 {
             t.add(fact.getCateory(),fact.getMonth(),fact.getAmount());
         }
 
-        // TODO: 08.11.2016 add columns & rows sorting
+        // * add columns & rows sorting
         // TODO: 08.11.2016 add columns & rows total;
         // TODO add total;
         List<String> columns = t.getColumnsName();
+        Collections.sort(columns);
         System.out.printf("%-15s ", "период");
         for (String column : columns) {
             System.out.printf("|%10s",column);
         }
         System.out.println();
-        for (String row : t.getRowsName()) {
+        final List<String> rows = t.getRowsName();
+        Collections.sort(rows);
+        for (String row : rows) {
             System.out.printf("%-15s ", row);
             for (String column : columns) {
                 System.out.printf("|%10s",t.get(row,column).toString());
