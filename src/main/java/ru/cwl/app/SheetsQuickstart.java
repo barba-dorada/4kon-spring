@@ -26,7 +26,7 @@ public class SheetsQuickstart {
         print(facts);*/
 
         String PLANS = "'планы с Q4Y2016'!A3:L";
-        List<TemplPlan> templPlans = load(service, SHEET_ID, PLANS, new TemplPlanMapper());
+        List<TemplPlan> templPlans = Util.load(service, SHEET_ID, PLANS, new TemplPlanMapper());
 
         List<TemplPlan> sl = templPlans.subList(0, 5);
         print(sl);
@@ -44,21 +44,7 @@ public class SheetsQuickstart {
         System.out.println(s);
     }
 
-    private static <T> List<T> load(Sheets service, String spreadsheetId, String range, RowMapper<T> m) throws IOException {
-        ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
-        List<List<Object>> values = response.getValues();
-        List<T> result = new ArrayList<T>();
 
-        if (values != null && values.size() > 0) {
-            for (List row : values) {
-                T v = m.map(row);
-                if(m.isValid(v)) {
-                    result.add(v);
-                }
-            }
-        }
-        return result;
-    }
 
 
 }
