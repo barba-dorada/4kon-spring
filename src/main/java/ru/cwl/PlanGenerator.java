@@ -1,6 +1,5 @@
 package ru.cwl;
 
-import com.sun.istack.internal.NotNull;
 import ru.cwl.model.DateMethod;
 import ru.cwl.model.Plan;
 import ru.cwl.model.TemplPlan;
@@ -8,8 +7,6 @@ import ru.cwl.model.TemplPlan;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.time.temporal.ChronoUnit.MONTHS;
 
 /**
  * Created by admin on 28.10.2016.
@@ -30,7 +27,7 @@ public class PlanGenerator {
     // TODO: 30.10.2016 перенести функциональность в енум
     // TODO: 31.10.2016 написать для года
     // на выходе список конкретных планов
-    public List<Plan> generate(TemplPlan template, @NotNull LocalDate from, @NotNull LocalDate to) {
+    public List<Plan> generate(TemplPlan template, LocalDate from, LocalDate to) {
         List<Plan> result = new ArrayList<Plan>();
         DateMethod m = template.getDateMethod();
         LocalDate firstDate = m.getFirstDate(template.getFirstDate(), from);

@@ -12,13 +12,10 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by admin on 09.11.2016.
- */
 public class Main {
     public static void main(String[] args) throws IOException {
         GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
-        ctx.load("classpath:context.xml");
+        ctx.load("classpath:META-INF/spring/context.xml");
         ctx.refresh();
         Sheets gtService = ctx.getBean("gtService", Sheets.class);
 

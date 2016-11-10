@@ -7,6 +7,7 @@ import java.time.LocalDate;
  * Created by admin on tring26.10.2016.
  */
 public class Fact {
+    Long id;
     String user;
     LocalDate date;
     String account;
@@ -19,7 +20,8 @@ public class Fact {
     @Override
     public String toString() {
         return "Fact{" +
-                "user='" + user + '\'' +
+                "id="+id+
+                ", user='" + user + '\'' +
                 ", date=" + date +
                 ", account='" + account + '\'' +
                 ", cateory='" + cateory + '\'' +
@@ -28,6 +30,14 @@ public class Fact {
                 ", subtotal=" + subtotal +
                 ", month='" + month + '\'' +
                 '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCateory() {
