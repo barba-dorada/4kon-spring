@@ -1,25 +1,16 @@
-package ru.cwl.app;
+package ru.cwl.util;
 
-import com.google.api.services.sheets.v4.Sheets;
-import ru.cwl.googlesimport.GTService;
-import ru.cwl.mappers.FactMapper;
 import ru.cwl.model.Fact;
-import ru.cwl.util.T2;
-import ru.cwl.util.Util;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
-public class AppGroupFacts2 {
-    public static void main(String[] args) throws IOException {
-        // Build a new authorized API client service.
-        Sheets service = GTService.getSheetsService();
-
-        final String SHEET_ID = "1EmCA5qbW0VnT09QwskgBag-jO4O4rDzYQlHRlHXnMpk";
-        final String FACTS = "'ф1'!A2:H";
-        List<Fact> facts = Util.load(service, SHEET_ID, FACTS, new FactMapper());
-//        print(facts);
+/**
+ * Created by tischenko on 10.11.2016.
+ */
+public class AggrTable {
+    public static void printAgrTable(List<Fact> facts) {
         T2 t = new T2();
         for (Fact fact : facts) {
             t.add(fact.getCateory(),fact.getMonth(),fact.getAmount());
@@ -48,4 +39,3 @@ public class AppGroupFacts2 {
         }
     }
 }
-

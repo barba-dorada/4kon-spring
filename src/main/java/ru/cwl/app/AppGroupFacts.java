@@ -1,21 +1,14 @@
 package ru.cwl.app;
 
 import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.model.ValueRange;
-import ru.cwl.PlanGenerator;
 import ru.cwl.googlesimport.GTService;
 import ru.cwl.mappers.FactMapper;
-import ru.cwl.mappers.RowMapper;
-import ru.cwl.mappers.TemplPlanMapper;
 import ru.cwl.model.Fact;
-import ru.cwl.model.Plan;
-import ru.cwl.model.TemplPlan;
+import ru.cwl.util.Util;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AppGroupFacts {
     public static void main(String[] args) throws IOException {

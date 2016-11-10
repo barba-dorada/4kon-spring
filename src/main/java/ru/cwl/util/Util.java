@@ -1,4 +1,4 @@
-package ru.cwl.app;
+package ru.cwl.util;
 
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.ValueRange;
@@ -29,7 +29,7 @@ public class Util {
         return result;
     }
 
-    private static void print(List<? extends Object> list) {
+    public static void print(List<? extends Object> list) {
         String name = list.get(0).getClass().getName();
         System.out.println(name + "____________________________");
         String s = list.stream().map(i -> i.toString()).collect(Collectors.joining("\n"));

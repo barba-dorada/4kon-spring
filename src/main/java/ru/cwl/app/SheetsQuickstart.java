@@ -1,17 +1,15 @@
 package ru.cwl.app;
 
 import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.model.ValueRange;
 import ru.cwl.PlanGenerator;
 import ru.cwl.googlesimport.GTService;
-import ru.cwl.mappers.RowMapper;
 import ru.cwl.mappers.TemplPlanMapper;
 import ru.cwl.model.Plan;
 import ru.cwl.model.TemplPlan;
+import ru.cwl.util.Util;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

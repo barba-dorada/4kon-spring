@@ -1,4 +1,4 @@
-package ru.cwl.app;
+package ru.cwl.util;
 
 import java.util.*;
 
