@@ -17,6 +17,7 @@
     <bean id="gtService" class="ru.cwl.googlesimport.GTService" factory-method="getSheetsService"/>
     <bean id="gtFactDao" class="ru.cwl.dao.GTFactDao">
         <property name="gtService" ref="gtService"/>
+
     </bean>
 
 

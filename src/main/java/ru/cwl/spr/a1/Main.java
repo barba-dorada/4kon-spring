@@ -1,12 +1,11 @@
 package ru.cwl.spr.a1;
 
-import com.google.api.services.sheets.v4.Sheets;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
-import ru.cwl.util.AggrTable;
-import ru.cwl.util.Util;
-import ru.cwl.mappers.FactMapper;
+import ru.cwl.dao.FactDaoInt;
+import ru.cwl.dao.GTFactDao;
 import ru.cwl.model.Fact;
+import ru.cwl.util.AggrTable;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -17,18 +16,15 @@ public class Main {
         GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
         ctx.load("classpath:META-INF/spring/context.xml");
         ctx.refresh();
-        Sheets gtService = ctx.getBean("gtService", Sheets.class);
+        //Sheets gtService = ctx.getBean("gtService", Sheets.class);
 
         DataSource ds = ctx.getBean("dataSource", DataSource.class);
         JdbcTemplate t=new JdbcTemplate();
         t.setDataSource(ds);
 
-
-        final String SHEET_ID = "1EmCA5qbW0VnT09QwskgBag-jO4O4rDzYQlHRlHXnMpk";
-        final String FACTS = "'ф1'!A2:H";
-        List<Fact> facts = Util.load(gtService, SHEET_ID, FACTS, new FactMapper());
-        Util.print(facts);
+        FactDaoInt dd = ctx.getBean("gtFactDao", GTFactDao.class);
+        List<Fact> facts = dd.findAll();
+        //Util.print(facts);
         AggrTable.printAgrTable(facts);
     }
 }
-
