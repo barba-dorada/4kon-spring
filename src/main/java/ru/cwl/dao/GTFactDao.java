@@ -6,6 +6,7 @@ import ru.cwl.model.Fact;
 import ru.cwl.util.Util;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,11 @@ public class GTFactDao implements FactDaoInt {
     }
 
     @Override
+    public List<Fact> findFromTo(LocalDate from, LocalDate to) {
+        return findAll();
+    }
+
+    @Override
     public Fact findById(Long id) {
         return null;
     }
@@ -41,5 +47,15 @@ public class GTFactDao implements FactDaoInt {
     @Override
     public Fact insert(Fact f) {
         return null;
+    }
+
+    @Override
+    public void update(Fact f) {
+
+    }
+
+    @Override
+    public void delete(Long id) {
+
     }
 }

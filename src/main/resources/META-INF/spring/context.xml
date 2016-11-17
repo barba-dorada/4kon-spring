@@ -19,6 +19,8 @@
         <property name="gtService" ref="gtService"/>
 
     </bean>
-
+    <bean id="factDao" class="ru.cwl.dao.JdbcTemplateFactDao">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
 </beans>

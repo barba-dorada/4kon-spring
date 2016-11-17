@@ -30,8 +30,10 @@ public class Util {
     }
 
     public static void print(List<? extends Object> list) {
-        String name = list.get(0).getClass().getName();
-        System.out.println(name + "____________________________");
+        if(!list.isEmpty()) {
+            String name = list.get(0).getClass().getName();
+            System.out.println(name + "____________________________");
+        }
         String s = list.stream().map(i -> i.toString()).collect(Collectors.joining("\n"));
         System.out.println(s);
     }

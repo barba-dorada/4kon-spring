@@ -13,7 +13,7 @@ public class AggrTable {
     public static void printAgrTable(List<Fact> facts) {
         T2 t = new T2();
         for (Fact fact : facts) {
-            t.add(fact.getCateory(),fact.getMonth(),fact.getAmount());
+            t.add(fact.getCateory(),fact.getDate().toString().substring(0,7),fact.getAmount());
         }
 
         // TODO: 08.11.2016 add columns total
