@@ -21,7 +21,10 @@ import java.util.Map;
 
 /**
  * Created by admin on 17.11.2016.
+ * http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jdbc
+ *
  */
+
 public class JdbcTemplateFactDao implements FactDaoInt {
     public static final Log log=LogFactory.getLog(JdbcTemplateFactDao.class);
     DataSource dataSource;
