@@ -34,6 +34,9 @@ public class Main {
         dbDao.delete(2L);
         dbDao.delete(3L);
 
+        System.out.println(dbDao.findById(5L));
+        System.out.println(dbDao.findById(6L));
+
         allFromDB = dbDao.findAll();
         Util.print(allFromDB);
 

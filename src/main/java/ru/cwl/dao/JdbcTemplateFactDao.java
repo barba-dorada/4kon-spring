@@ -54,7 +54,9 @@ public class JdbcTemplateFactDao implements FactDaoInt {
 
     @Override
     public Fact findById(Long id) {
-        return null;
+        String sql = "SELECT id, user, date,account,category,amount,comment FROM FACTS where id="+id;
+        Fact fact = tpl.queryForObject(sql, new FactMapper());
+        return fact;
     }
 
     @Override
