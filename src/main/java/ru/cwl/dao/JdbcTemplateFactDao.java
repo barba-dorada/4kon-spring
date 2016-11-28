@@ -23,15 +23,17 @@ import java.util.Map;
  * Created by admin on 17.11.2016.
  */
 public class JdbcTemplateFactDao implements FactDaoInt {
-    public static final Log log=LogFactory.getLog(JdbcTemplateFactDao.class);
+    public static final Log log = LogFactory.getLog(JdbcTemplateFactDao.class);
     DataSource dataSource;
     JdbcTemplate tpl;
     InsertFact insertTpl;
+    UpdateFact updateTpl;
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
         tpl = new JdbcTemplate(dataSource);
         insertTpl = new InsertFact(dataSource);
+        updateTpl = new UpdateFact(dataSource);
     }
 
     @Override
@@ -63,13 +65,23 @@ public class JdbcTemplateFactDao implements FactDaoInt {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         insertTpl.updateByNamedParam(mapParam, keyHolder);
         f.setId(keyHolder.getKey().longValue());
-        log.info("new Fact inserted with id: "+keyHolder.getKey());
+        log.info("new Fact inserted with id: " + keyHolder.getKey());
         return f;
     }
 
     @Override
     public void update(Fact f) {
+        Map<String, Object> mapParam = new HashMap<>();
+        mapParam.put("user", f.getUser());
+        mapParam.put("date", java.sql.Date.valueOf(f.getDate()));
+        mapParam.put("account", f.getAccount());
+        mapParam.put("category", f.getCateory());
+        mapParam.put("amount", f.getAmount());
+        mapParam.put("comment", f.getComment());
+        mapParam.put("id", f.getId());
 
+        updateTpl.updateByNamedParam(mapParam);
+        log.info("new Fact updated with id: " + f.getId());
     }
 
     @Override
@@ -107,6 +119,23 @@ public class JdbcTemplateFactDao implements FactDaoInt {
             super.declareParameter(new SqlParameter("comment", Types.VARCHAR));
             super.setGeneratedKeysColumnNames(new String[]{"id"});
             super.setReturnGeneratedKeys(true);
+        }
+    }
+
+    static class UpdateFact extends SqlUpdate {
+        private static final String sql = "UPDATE FACTS SET user=:user, date=:date,account=:account,category=:category," +
+                "amount=:amount,comment=:comment " +
+                "WHERE id=:id";
+
+        public UpdateFact(DataSource dataSource) {
+            super(dataSource, sql);
+            super.declareParameter(new SqlParameter("user", Types.VARCHAR));
+            super.declareParameter(new SqlParameter("date", Types.TIMESTAMP));
+            super.declareParameter(new SqlParameter("account", Types.VARCHAR));
+            super.declareParameter(new SqlParameter("category", Types.VARCHAR));
+            super.declareParameter(new SqlParameter("amount", Types.NUMERIC));
+            super.declareParameter(new SqlParameter("comment", Types.VARCHAR));
+            super.declareParameter(new SqlParameter("id", Types.BIGINT));
         }
     }
 }

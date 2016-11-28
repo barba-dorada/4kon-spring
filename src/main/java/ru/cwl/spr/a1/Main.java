@@ -26,6 +26,11 @@ public class Main {
         Util.print(allFromGT);
         allFromGT.forEach(dbDao::insert);
         List<Fact> allFromDB = dbDao.findAll();
+        Fact f = allFromDB.get(0);
+        f.setUser("A");
+        f.setComment("comment 345");
+        dbDao.update(f);
+        allFromDB = dbDao.findAll();
         Util.print(allFromDB);
 
         AggrTable.printAgrTable(allFromGT);
