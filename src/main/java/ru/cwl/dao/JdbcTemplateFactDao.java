@@ -22,7 +22,6 @@ import java.util.Map;
 /**
  * Created by admin on 17.11.2016.
  * http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jdbc
- *
  */
 
 public class JdbcTemplateFactDao implements FactDaoInt {
@@ -31,12 +30,14 @@ public class JdbcTemplateFactDao implements FactDaoInt {
     JdbcTemplate tpl;
     InsertFact insertTpl;
     UpdateFact updateTpl;
+    DeleteFact deleteTpl;
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
         tpl = new JdbcTemplate(dataSource);
         insertTpl = new InsertFact(dataSource);
         updateTpl = new UpdateFact(dataSource);
+        deleteTpl = new DeleteFact(dataSource);
     }
 
     @Override
@@ -89,6 +90,12 @@ public class JdbcTemplateFactDao implements FactDaoInt {
 
     @Override
     public void delete(Long id) {
+        Map<String, Object> mapParam = new HashMap<>();
+
+        mapParam.put("id", id);
+
+        deleteTpl.updateByNamedParam(mapParam);
+        log.info("delecte Fact with id: " + id);
 
     }
 
@@ -138,6 +145,15 @@ public class JdbcTemplateFactDao implements FactDaoInt {
             super.declareParameter(new SqlParameter("category", Types.VARCHAR));
             super.declareParameter(new SqlParameter("amount", Types.NUMERIC));
             super.declareParameter(new SqlParameter("comment", Types.VARCHAR));
+            super.declareParameter(new SqlParameter("id", Types.BIGINT));
+        }
+    }
+
+    static class DeleteFact extends SqlUpdate {
+        private static final String sql = "DELETE FROM  FACTS WHERE id=:id";
+
+        public DeleteFact(DataSource dataSource) {
+            super(dataSource, sql);
             super.declareParameter(new SqlParameter("id", Types.BIGINT));
         }
     }

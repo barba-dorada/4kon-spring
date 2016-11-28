@@ -30,6 +30,10 @@ public class Main {
         f.setUser("A");
         f.setComment("comment 345");
         dbDao.update(f);
+
+        dbDao.delete(2L);
+        dbDao.delete(3L);
+
         allFromDB = dbDao.findAll();
         Util.print(allFromDB);
 
