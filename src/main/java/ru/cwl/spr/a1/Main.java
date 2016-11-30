@@ -9,6 +9,7 @@ import ru.cwl.util.AggrTable;
 import ru.cwl.util.Util;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class Main {
@@ -43,5 +44,8 @@ public class Main {
         AggrTable.printAgrTable(allFromGT);
         System.out.println();
         AggrTable.printAgrTable(allFromDB);
+
+        List<Fact> res = dbDao.findFromTo(LocalDate.of(2016, 11, 1), LocalDate.of(2016, 11, 5));
+        Util.print(res);
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import ru.cwl.model.Fact;
 
 import javax.sql.DataSource;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -22,6 +23,7 @@ import java.util.Map;
 /**
  * Created by admin on 17.11.2016.
  * http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jdbc
+ * http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jdbc-introduction
  */
 
 public class JdbcTemplateFactDao implements FactDaoInt {
@@ -49,12 +51,14 @@ public class JdbcTemplateFactDao implements FactDaoInt {
 
     @Override
     public List<Fact> findFromTo(LocalDate from, LocalDate to) {
-        return null;
+        String sql = "SELECT id, user, date,account,category,amount,comment FROM FACTS " +
+                "WHERE date  >=? AND date <= ?";
+        return tpl.query(sql, new Object[]{Date.valueOf(from), Date.valueOf(to)}, new FactMapper());
     }
 
     @Override
     public Fact findById(Long id) {
-        String sql = "SELECT id, user, date,account,category,amount,comment FROM FACTS where id="+id;
+        String sql = "SELECT id, user, date,account,category,amount,comment FROM FACTS where id=" + id;
         Fact fact = tpl.queryForObject(sql, new FactMapper());
         return fact;
     }
@@ -68,6 +72,7 @@ public class JdbcTemplateFactDao implements FactDaoInt {
         mapParam.put("category", f.getCateory());
         mapParam.put("amount", f.getAmount());
         mapParam.put("comment", f.getComment());
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
         insertTpl.updateByNamedParam(mapParam, keyHolder);
         f.setId(keyHolder.getKey().longValue());
@@ -93,7 +98,6 @@ public class JdbcTemplateFactDao implements FactDaoInt {
     @Override
     public void delete(Long id) {
         Map<String, Object> mapParam = new HashMap<>();
-
         mapParam.put("id", id);
 
         deleteTpl.updateByNamedParam(mapParam);
@@ -135,9 +139,10 @@ public class JdbcTemplateFactDao implements FactDaoInt {
     }
 
     static class UpdateFact extends SqlUpdate {
-        private static final String sql = "UPDATE FACTS SET user=:user, date=:date,account=:account,category=:category," +
-                "amount=:amount,comment=:comment " +
-                "WHERE id=:id";
+        private static final String sql =
+                "UPDATE FACTS SET user=:user, date=:date,account=:account,category=:category," +
+                        "amount=:amount,comment=:comment " +
+                        "WHERE id=:id";
 
         public UpdateFact(DataSource dataSource) {
             super(dataSource, sql);
